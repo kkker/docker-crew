@@ -1,0 +1,41 @@
+# COMPOSE_BAKE=true docker compose up --build --force-recreate -d
+
+
+## Issue, failed to mkdir ... read-only file system
+# 在執行你提供的「你現在可以放心地繼續執行第三步，讓 Docker Compose 重新建構：」指令後，得到下面錯誤：
+#  => ERROR [stage-1 3/3] COPY --from=builder /app/.venv /app/.venv         33.0s
+# ------
+#  > [stage-1 3/3] COPY --from=builder /app/.venv /app/.venv:
+# ------
+# failed to solve: failed to mkdir /var/lib/docker/overlay2/m5yxknanas3ceamsq8wpj7b4l/merged/app/.venv/lib/python3.12/site-packages/tokenizers-0.23.2.dist-info: mkdir /app/.venv/lib/python3.12/site-packages/tokenizers-0.23.2.dist-info: read-only file system
+#
+# 第一步：乾淨地關閉目前的 Compose 狀態
+# 先將所有可能卡住的容器、網路與臨時掛載全部清除：
+# docker compose down --volumes --remove-orphans
+#
+# 第二步：清除 Docker 壞掉的快取（關鍵步驟）
+# 執行這行指令來清除 Build 階段卡住的唯讀快取。請放心，這不會刪除你的程式碼，它只會清掉 Docker 的臨時快取緩衝區：
+# docker builder prune -f
+#
+# 第三步：不要使用 COMPOSE_BAKE=true，用標準指令重新建構
+# docker compose up --build --force-recreate -d
+
+services:
+  crewai-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: crewai_development
+    # 自動讀取本地的 .env 檔案並傳進容器中
+    env_file:
+      - .env
+    # 核心：將 Mac 本地目錄掛載到容器內，達到即時同步程式碼的效果
+    volumes:
+      - .:/app
+      # 防止容器內的虛擬環境被 Mac 本地的空目錄或舊目錄覆蓋
+      - /app/.venv
+    # 保持容器運行，方便持續開發或互動
+    tty: true
+    stdin_open: true
+    # 💡 修改這裡：讓容器在背景無限等待，不直接結束
+    command: tail -f /dev/null

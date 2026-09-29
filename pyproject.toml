@@ -1,0 +1,32 @@
+[project]
+name = "docker-ollama-crew"
+version = "0.1.0"
+description = "CrewAI app running inside Docker"
+readme = "README.md"
+authors = [
+    { name = "Ping Lai", email = "" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "pypdfium2==5.13.0",
+    "cryptography",
+    "crewai",
+    "langchain-community",
+    "beautifulsoup4",
+    "pypdf",
+    "langchain-ollama",
+    "langchain-chroma"
+]
+## 第一步：修改 Mac 本地的 pyproject.toml
+# 新增 module 到 dependencies
+## 第二步：更新 uv.lock 鎖定檔
+# docker run --rm -v "$(pwd):/app" -w /app ghcr.io/astral-sh/uv:python3.12-bookworm uv lock
+## 第三步：重新建構 Docker 容器
+# docker compose up --build --force-recreate -d
+
+[project.scripts]
+docker-ollama-crew = "docker_ollama_crew:main"
+
+[build-system]
+requires = ["uv_build>=0.12.17,<0.13.0"]
+build-backend = "uv_build"
