@@ -97,7 +97,7 @@ def query_knowledge_tool(query: Union[str, Dict[str, Any]]) -> str:
     else:
         query_str = str(query)
         
-    print(f"\n🔍 [工具內部接收] 框架實際傳入: '{query_str}'")
+    print(f"\n🔍 [工具內部接收] 框架實際傳入: '{query_str}'\n")
 
     # =========================================================================
     # ✨ 這裡是最容易擴充關鍵字的地方（未來只要在這邊自由新增一行即可）
