@@ -6,5 +6,29 @@ dist/
 wheels/
 *.egg-info
 
+# --- Python 編譯暫存 ---
+**/__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ruff_cache/
+
 # Virtual environments
 .venv
+
+# --- uv 與 Python 虛擬環境 ---
+.venv/
+.uv/
+
+# --- CrewAI 暫存與快取 ---
+.crewai/
+
+# --- 環境變數與敏感資訊 ---
+.env
+.env.*
+!.env.example
+
+# --- 作業系統與 IDE 快取 ---
+.DS_Store
+.vscode/
+.idea/
