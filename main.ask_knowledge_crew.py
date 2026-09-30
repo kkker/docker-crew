@@ -272,8 +272,9 @@ def ask_knowledge_crew(questions: List[str]) -> str:
 
     # 2. 初始化本地 LLM
     internal_ollama_llm = LLM(
-        # temperature=0,
-        model="ollama/llama3.2:latest",
+        temperature=0,
+        # model="ollama/llama3.2:latest",
+        model="ollama/qwen2.5",
         base_url=OLLAMA_URL
     )
 
